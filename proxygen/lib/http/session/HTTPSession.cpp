@@ -852,7 +852,8 @@ HTTPSession::onMessageComplete(HTTPCodec::StreamID streamID,
   if (txnIngressFinished) {
     decrementTransactionCount(txn, true, false);
   }
-  txn->onIngressEOM();
+  if (!upgrade)
+    txn->onIngressEOM();
 
   // The codec knows, based on the semantics of whatever protocol it
   // supports, whether it's valid for any more ingress messages to arrive

@@ -429,7 +429,7 @@ HTTP1xCodec::generateHeader(IOBufQueue& writeBuf,
       }
       // We'll generate a new Connection header based on the keepalive_ state
       return;
-    } else if (code == HTTP_HEADER_UPGRADE && upstream && txn == 1) {
+    } else if (code == HTTP_HEADER_UPGRADE && txn == 1) {
       // save in case we get a 101 Switching Protocols
       upgradeHeader_ = value;
       hasUpgradeHeader = true;
@@ -513,6 +513,13 @@ HTTP1xCodec::generateHeader(IOBufQueue& writeBuf,
     size->compressed = 0;
     size->uncompressed = len;
   }
+
+  if (caseInsensitiveEqual(upgradeHeader_, "websocket") && downstream) {
+    ingressUpgrade_ = true;
+    egressUpgrade_ = true;
+    ingressUpgradeComplete_ = true;
+  }
+
 }
 
 size_t
@@ -663,6 +670,7 @@ size_t HTTP1xCodec::generateGoaway(
 
 void HTTP1xCodec::setAllowedUpgradeProtocols(std::list<std::string> protocols) {
   CHECK(transportDirection_ == TransportDirection::DOWNSTREAM);
+  allowedNativeUpgrades_ = folly::to<string>("websocket,");
   for (const auto& proto: protocols) {
     allowedNativeUpgrades_ += folly::to<string>(proto, ",");
   }
@@ -885,6 +893,9 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
         auto result = checkForProtocolUpgrade(upgradeHeader_,
                                               allowedNativeUpgrades_,
                                               true /* server mode */);
+        if (result)
+          ingressUpgrade_ = true;
+
         if (result && result->first != CodecProtocol::HTTP_1_1) {
           upgradeResult_ = *result;
           // unfortunately have to copy because msg_ is passed to
