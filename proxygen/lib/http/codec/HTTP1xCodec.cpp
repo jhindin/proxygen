@@ -901,6 +901,10 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
     }
   }
   else {
+    static const string kWebsocket = "websocket";
+
+    upgradeHeader_ = msg_->getHeaders().getSingleOrEmpty(HTTP_HEADER_UPGRADE);
+
     if (connectRequest_) {
       // Enable upgrade by default for the CONNECT requests.
       // If we locally reject CONNECT, we will disable this flag while
@@ -908,8 +912,9 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
       // we will start forwarding data to the proxy without waiting for
       // the response from the proxy server.
       ingressUpgrade_ = true;
+    } else if (caseInsensitiveEqual(upgradeHeader_, kWebsocket)) {
+      ingressUpgrade_ = true;
     } else if (!allowedNativeUpgrades_.empty() && ingressTxnID_ == 1) {
-      upgradeHeader_ = msg_->getHeaders().getSingleOrEmpty(HTTP_HEADER_UPGRADE);
       if (!upgradeHeader_.empty() && !allowedNativeUpgrades_.empty()) {
         auto result = checkForProtocolUpgrade(upgradeHeader_,
                                               allowedNativeUpgrades_,
