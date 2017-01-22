@@ -62,10 +62,6 @@ extern const char* getConnectionCloseReasonString(ConnectionCloseReason r);
 enum class UpgradeProtocol: int {
   NONE,
   TCP,
-  HTTP_1_1,
-  SPDY_3,
-  SPDY_3_1,
-  HTTP_2,
   WEBSOCKET
 };
 
