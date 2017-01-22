@@ -51,8 +51,8 @@ void PassThroughHTTPCodecFilter::onTrailersComplete(
 }
 
 void PassThroughHTTPCodecFilter::onMessageComplete(StreamID stream,
-                                                   bool upgrade, UpgradeProtocol) {
-  callback_->onMessageComplete(stream, upgrade);
+                                                   bool upgrade, UpgradeProtocol protocol) {
+  callback_->onMessageComplete(stream, upgrade, protocol);
 }
 
 void PassThroughHTTPCodecFilter::onFrameHeader(

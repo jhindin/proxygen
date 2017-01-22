@@ -177,6 +177,7 @@ class HTTP1xCodec : public HTTPCodec {
   bool is1xxResponse_:1;
   bool inRecvLastChunk_:1;
   bool ingressUpgrade_:1;
+  UpgradeProtocol ingressUpgradeProtocol_;
   bool ingressUpgradeComplete_:1;
   bool egressUpgrade_:1;
   bool nativeUpgrade_:1;

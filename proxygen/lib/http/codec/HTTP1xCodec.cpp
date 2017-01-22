@@ -103,6 +103,7 @@ HTTP1xCodec::HTTP1xCodec(TransportDirection direction, bool forceUpstream1_1)
     is1xxResponse_(false),
     inRecvLastChunk_(false),
     ingressUpgrade_(false),
+    ingressUpgradeProtocol_(UpgradeProtocol::NONE),
     ingressUpgradeComplete_(false),
     egressUpgrade_(false),
     nativeUpgrade_(false),
@@ -1043,7 +1044,7 @@ int HTTP1xCodec::onMessageComplete() {
   }
 
   if (!nativeUpgrade_) {
-    callback_->onMessageComplete(ingressTxnID_, ingressUpgrade_);
+    callback_->onMessageComplete(ingressTxnID_, ingressUpgrade_, ingressUpgradeProtocol_);
   }
   // else we suppressed onHeadersComplete, suppress onMessageComplete also.
   // The new codec will handle these callbacks with the real message
