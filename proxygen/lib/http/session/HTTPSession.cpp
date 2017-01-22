@@ -854,7 +854,7 @@ HTTPSession::onMessageComplete(HTTPCodec::StreamID streamID,
      * sessions.
      */
     ingressUpgraded_ = true;
-    txn->onIngressUpgrade(UpgradeProtocol::TCP);
+    txn->onIngressUpgrade(protocol);
     return;
   }
 

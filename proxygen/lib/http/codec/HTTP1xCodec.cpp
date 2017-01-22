@@ -865,6 +865,7 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
       // Enable upgrade if this is a 200 response to a CONNECT
       // request we sent earlier
       ingressUpgrade_ = true;
+      ingressUpgradeProtocol_ = UpgradeProtocol::TCP;
     } else if (parser_.status_code == 101) {
       // Set the upgrade flags if the server has upgraded.
       const std::string& serverUpgrade =
@@ -880,6 +881,7 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
       if (result) {
         ingressUpgrade_ = true;
         egressUpgrade_ = true;
+
         if (result->first != CodecProtocol::HTTP_1_1) {
           bool success = callback_->onNativeProtocolUpgrade(
             ingressTxnID_, result->first, result->second, *msg_);
@@ -891,6 +893,7 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
         } else if (result->second == getCodecProtocolString(result->first)) {
           // someone upgraded to http/1.1?  Reset upgrade flags
           ingressUpgrade_ = false;
+          ingressUpgradeProtocol_ = UpgradeProtocol::NONE;
           egressUpgrade_ = false;
         }
         // else, there's some non-native upgrade
@@ -913,8 +916,10 @@ HTTP1xCodec::onHeadersComplete(size_t len) {
       // we will start forwarding data to the proxy without waiting for
       // the response from the proxy server.
       ingressUpgrade_ = true;
+      ingressUpgradeProtocol_ = UpgradeProtocol::TCP;
     } else if (caseInsensitiveEqual(upgradeHeader_, kWebsocket)) {
       ingressUpgrade_ = true;
+      ingressUpgradeProtocol_ = UpgradeProtocol::WEBSOCKET;
     } else if (!allowedNativeUpgrades_.empty() && ingressTxnID_ == 1) {
       if (!upgradeHeader_.empty() && !allowedNativeUpgrades_.empty()) {
         auto result = checkForProtocolUpgrade(upgradeHeader_,
