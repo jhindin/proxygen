@@ -836,7 +836,7 @@ HTTPSession::onTrailersComplete(HTTPCodec::StreamID streamID,
 
 void
 HTTPSession::onMessageComplete(HTTPCodec::StreamID streamID,
-                               bool upgrade) {
+                               bool upgrade, UpgradeProtocol protocol) {
   DestructorGuard dg(this);
   // The codec's parser detected the end of the ingress message for
   // this transaction.

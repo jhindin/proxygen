@@ -91,7 +91,7 @@ class RFC1867Codec: HTTPCodec::Callback {
     parseError_ = true;
     headerParser_.setParserPaused(true);
   }
-  void onMessageComplete(HTTPCodec::StreamID stream, bool upgrade) override {
+  void onMessageComplete(HTTPCodec::StreamID stream, bool upgrade, UpgradeProtocol protocol = UpgradeProtocol::NONE) override {
     headerParser_.setParserPaused(true);
   }
 

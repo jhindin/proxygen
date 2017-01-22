@@ -51,7 +51,7 @@ class HTTPCodecPrinter: public PassThroughHTTPCodecFilter {
    * Called from SPDYCodec::parseIngress()
    *             HTTP2Codec::handleEndStream()
    */
-  void onMessageComplete(StreamID stream, bool upgrade) override;
+  void onMessageComplete(StreamID stream, bool upgrade, UpgradeProtocol protocol = UpgradeProtocol::NONE) override;
 
   /*
    * Called from SPDYCodec::onSynCommon()

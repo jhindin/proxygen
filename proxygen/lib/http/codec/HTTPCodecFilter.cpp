@@ -51,7 +51,7 @@ void PassThroughHTTPCodecFilter::onTrailersComplete(
 }
 
 void PassThroughHTTPCodecFilter::onMessageComplete(StreamID stream,
-                                                   bool upgrade) {
+                                                   bool upgrade, UpgradeProtocol) {
   callback_->onMessageComplete(stream, upgrade);
 }
 

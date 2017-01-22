@@ -12,6 +12,7 @@
 #include <folly/Portability.h>
 #include <folly/io/IOBufQueue.h>
 #include <proxygen/lib/http/HTTPException.h>
+#include <proxygen/lib/http/HTTPConstants.h>
 #include <proxygen/lib/http/HTTPHeaderSize.h>
 #include <proxygen/lib/http/codec/CodecProtocol.h>
 #include <proxygen/lib/http/codec/ErrorCode.h>
@@ -145,7 +146,7 @@ class HTTPCodec {
      * @param upgrade  Whether the connection has been upgraded to another
      *                 protocol.
      */
-    virtual void onMessageComplete(StreamID stream, bool upgrade) = 0;
+    virtual void onMessageComplete(StreamID stream, bool upgrade, UpgradeProtocol protocol = UpgradeProtocol::NONE) = 0;
 
     /**
      * Called when a parsing or protocol error has occurred

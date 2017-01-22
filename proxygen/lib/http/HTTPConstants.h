@@ -60,8 +60,13 @@ extern const char* getConnectionCloseReasonString(ConnectionCloseReason r);
  * Protocol to which the HTTPTransaction was upgraded
  */
 enum class UpgradeProtocol: int {
-  // We only support changing to TCP after CONNECT requests
-  TCP
+  NONE,
+  TCP,
+  HTTP_1_1,
+  SPDY_3,
+  SPDY_3_1,
+  HTTP_2,
+  WEBSOCKET
 };
 
 }

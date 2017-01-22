@@ -61,7 +61,7 @@ void HTTPCodecPrinter::onBody(StreamID stream,
   callback_->onBody(stream, std::move(chain), padding);
 }
 
-void HTTPCodecPrinter::onMessageComplete(StreamID stream, bool upgrade) {
+void HTTPCodecPrinter::onMessageComplete(StreamID stream, bool upgrade, UpgradeProtocol) {
   std::cout << "DataComplete: stream_id=" << stream << std::endl;
   callback_->onMessageComplete(stream, upgrade);
 }

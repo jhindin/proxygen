@@ -618,7 +618,7 @@ class HTTPSession:
   void onChunkComplete(HTTPCodec::StreamID stream) override;
   void onTrailersComplete(HTTPCodec::StreamID streamID,
       std::unique_ptr<HTTPHeaders> trailers) override;
-  void onMessageComplete(HTTPCodec::StreamID streamID, bool upgrade) override;
+  void onMessageComplete(HTTPCodec::StreamID streamID, bool upgrade, UpgradeProtocol upgradeProtocol = UpgradeProtocol::NONE) override;
   void onError(HTTPCodec::StreamID streamID,
                const HTTPException& error, bool newTxn) override;
   void onAbort(HTTPCodec::StreamID streamID,

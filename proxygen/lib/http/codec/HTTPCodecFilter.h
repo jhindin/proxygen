@@ -54,7 +54,7 @@ class PassThroughHTTPCodecFilter: public HTTPCodecFilter {
   void onTrailersComplete(StreamID stream,
                           std::unique_ptr<HTTPHeaders> trailers) override;
 
-  void onMessageComplete(StreamID stream, bool upgrade) override;
+  void onMessageComplete(StreamID stream, bool upgrade, UpgradeProtocol upgradeprotocol = UpgradeProtocol::NONE) override;
 
   void onFrameHeader(uint32_t stream_id,
                      uint8_t flags,

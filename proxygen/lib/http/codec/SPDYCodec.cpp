@@ -323,7 +323,7 @@ size_t SPDYCodec::parseIngress(const folly::IOBuf& buf) {
     if (length_ == 0) {
       if (flags_ & spdy::CTRL_FLAG_FIN) {
         deliverCallbackIfAllowed(&HTTPCodec::Callback::onMessageComplete,
-                                 "onMessageComplete", streamId_, false);
+                                 "onMessageComplete", streamId_, false, UpgradeProtocol::NONE);
       }
       frameState_ = FrameState::FRAME_HEADER;
     }

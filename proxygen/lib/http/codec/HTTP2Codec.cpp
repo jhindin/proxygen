@@ -230,7 +230,7 @@ ErrorCode HTTP2Codec::handleEndStream() {
   if (pendingEndStreamHandling_ && expectedContinuationStream_ == 0) {
     pendingEndStreamHandling_ = false;
     deliverCallbackIfAllowed(&HTTPCodec::Callback::onMessageComplete,
-                             "onMessageComplete", curHeader_.stream, false);
+                             "onMessageComplete", curHeader_.stream, false, UpgradeProtocol::NONE);
   }
   return ErrorCode::NO_ERROR;
 }
